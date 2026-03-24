@@ -1,0 +1,32 @@
+-- 1. ELIMINAR TABLA SI YA EXISTE (Para evitar errores de "Table already exists")
+DROP TABLE IF EXISTS Clientes;
+
+-- 2. CREAR LA TABLA CLIENTES
+CREATE TABLE Clientes (
+    cliente_id INTEGER PRIMARY KEY,
+    nombres TEXT NOT NULL,
+    ciudad TEXT NOT NULL,
+    region TEXT NOT NULL,
+    genero TEXT,
+    telefono TEXT,
+    email TEXT,
+    fecha_registro DATE
+);
+
+
+-- 3. INSERTAR AL MENOS 3 REGISTROS 
+INSERT INTO Clientes (cliente_id, nombres, ciudad, region, genero, telefono, email, fecha_registro)
+VALUES
+ (1, "Carlos Soto", "La Serena", "Coquimbo", "M", "+569-7940-3675", "algo@algo.com", "2026-02-10"),
+ (2, "Fabiana Díaz", "Santiago", "Santiago", "F", "999999", "fabiana@algo.com", "2026-02-20"),
+ (3, "Mariana Villalobos", "Santiago", "Santiago", "F", "888888", "mariana@algo.com", "2026-03-05");
+
+-- 4. CONSULTAS DE PRUEBA
+-- Seleccionar todos los clientes
+SELECT * FROM Clientes;
+
+-- Filtrar por ciudad
+SELECT * FROM Clientes WHERE ciudad = "La Serena";
+
+-- Filtrar por nombre
+SELECT * FROM Clientes WHERE nombres LIKE "%Mariana%";

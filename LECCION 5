@@ -1,0 +1,63 @@
+
+--Lección 5: Consultas anidadas--
+
+
+-- Listar los clientes que hayan hecho más de una compra.
+-- Que tenga al menos 3 compras
+
+
+
+SELECT c.nombres
+FROM Clientes c
+WHERE c.cliente_id IN (
+    SELECT v.cliente_id
+    FROM Ventas v
+    GROUP BY v.cliente_id
+    HAVING COUNT(*) >= 3
+);
+
+-- Obtener el producto más vendido utilizando una subconsulta.
+
+
+SELECT nombre_producto
+FROM Productos
+WHERE producto_id = (
+    SELECT producto_id
+    FROM Ventas
+    GROUP BY producto_id
+    ORDER BY SUM(cantidad) DESC
+    LIMIT 1
+);
+
+-- Versión 2 - Multi modal
+
+
+SELECT v.producto_id, p.nombre_producto, SUM(v.cantidad) AS cant
+FROM Ventas v
+JOIN Productos p ON p.producto_id = v.producto_id
+GROUP BY v.producto_id, p.nombre_producto
+HAVING SUM(v.cantidad) = (
+    SELECT MAX(total_cantidad)
+    FROM (
+        SELECT producto_id, SUM(cantidad) AS total_cantidad
+        FROM Ventas
+        GROUP BY producto_id
+    )
+);
+
+-- Consultar el cliente que más gastó en total.
+
+SELECT v.cliente_id, c.nombres, SUM(v.total_venta) AS total
+FROM Ventas AS v
+LEFT JOIN Clientes AS c ON c.cliente_id = v.cliente_id
+GROUP BY v.cliente_id, c.nombres
+HAVING SUM(v.total_venta) = (
+    SELECT MAX(total)
+    FROM (
+        SELECT cliente_id, SUM(total_venta) As total
+        FROM Ventas
+        GROUP BY cliente_id
+    )
+);
+
+

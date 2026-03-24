@@ -1,0 +1,40 @@
+/* =========================================
+LECCIÓN 6: CREACIÓN Y MANIPULACIÓN DE TABLAS
+========================================= */
+
+-- 1. Agregar columna stock a la tabla Productos
+ALTER TABLE Productos ADD COLUMN stock INTEGER;
+
+-- 2. Visualizar productos (reemplazando NULL por valor referencial)
+SELECT 
+    producto_id, 
+    nombre_producto, 
+    categoria, 
+    precio_unitario, 
+    fecha_ingreso,
+    IFNULL(stock, 10) AS stock
+FROM Productos;
+
+-- 3. Inicializar stock en 0 donde sea NULL
+UPDATE Productos
+SET stock = 0
+WHERE stock IS NULL;
+
+-- 4. Asignar stock inicial a cada producto
+UPDATE Productos SET stock = 10 WHERE producto_id = 1;
+UPDATE Productos SET stock = 20 WHERE producto_id = 2;
+UPDATE Productos SET stock = 30 WHERE producto_id = 3;
+
+-- 5. Registrar una nueva venta
+INSERT INTO Ventas
+(venta_id, cliente_id, producto_id, fecha_venta, cantidad, total_venta)
+VALUES
+(5, 3, 3, '2026-03-15', 1, 25000);
+
+-- 6. Actualizar stock después de la venta
+UPDATE Productos
+SET stock = stock - 1
+WHERE producto_id = 3;
+
+-- 7. Verificar resultado final
+SELECT * FROM Productos;
